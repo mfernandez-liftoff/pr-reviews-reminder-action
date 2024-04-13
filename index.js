@@ -59,6 +59,7 @@ async function main() {
     const channel = core.getInput('channel');
     const github2providerString = core.getInput('github-provider-map');
     const githubProviderFilter = core.getBooleanInput('github-provider-filter');
+    core.info(`Should filter: ${githubProviderFilter}`);
     const ignoreLabel = core.getInput('ignore-label');
     core.info('Getting open pull requests...');
     const pullRequests = await getPullRequests();
