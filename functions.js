@@ -29,6 +29,21 @@ function getPullRequestsReviewersCount(pullRequests) {
 }
 
 /**
+ * Filter the Pr2 User array
+ * @param {Array} pr2Users Array of Objects with { url, title, login } properties
+ * @param {Object} githubProviderMap Object with usernames as properties and IDs as values
+ * @param {Boolean} githubProviderFilter flag to determine whether to filter pr2Users
+ * @return {Array} Filtered Array of Objects with { url, title, login } properties
+ */
+function getPr2UserArrayFiltered(pr2Users, githubProviderMap, githubProviderFilter) {
+  if (!githubProviderFilter) {
+    return pr2Users
+  }
+  const users = githubProviderMap.keys()
+  return pr2Users.filter((pr) => pr['login'] in users)
+}
+
+/**
  * Create an Array of Objects with { url, title, login } properties from a list of Pull Requests
  * @param {Array} pullRequestsToReview Pull Requests
  * @return {Array} Array of Objects with { url, title, login } properties
@@ -219,6 +234,7 @@ module.exports = {
   getPullRequestsToReview,
   getPullRequestsWithoutLabel,
   getPullRequestsReviewersCount,
+  getPr2UserArrayFiltered,
   createPr2UserArray,
   checkGithubProviderFormat,
   stringToObject,

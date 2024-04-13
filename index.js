@@ -6,6 +6,7 @@ const {
   getPullRequestsToReview,
   getPullRequestsWithoutLabel,
   getPullRequestsReviewersCount,
+  getPr2UserArrayFiltered,
   createPr2UserArray,
   checkGithubProviderFormat,
   prettyMessage,
@@ -57,6 +58,7 @@ async function main() {
     const provider = core.getInput('provider');
     const channel = core.getInput('channel');
     const github2providerString = core.getInput('github-provider-map');
+    const githubProviderFilter = (core.getInput('github-provider-filter').toLowerCase() === 'true');
     const ignoreLabel = core.getInput('ignore-label');
     core.info('Getting open pull requests...');
     const pullRequests = await getPullRequests();
@@ -71,7 +73,12 @@ async function main() {
         return core.setFailed(`The github-provider-map string is not in correct format: "name1:id1,name2:id2,..."`);
       }
       const github2provider = stringToObject(github2providerString);
-      const messageText = prettyMessage(pr2user, github2provider, provider);
+      const pr2userFiltered = getPr2UserArrayFiltered(pr2user, github2provider, githubProviderFilter);
+      if (!pr2userFiltered.length) {
+        core.info(`No notifications to send after filter.`);
+        return;
+      }
+      const messageText = prettyMessage(pr2userFiltered, github2provider, provider);
       let messageObject;
       switch (provider) {
         case 'slack':
