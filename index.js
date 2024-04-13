@@ -58,7 +58,7 @@ async function main() {
     const provider = core.getInput('provider');
     const channel = core.getInput('channel');
     const github2providerString = core.getInput('github-provider-map');
-    const githubProviderFilter = (core.getInput('github-provider-filter').toLowerCase() === 'true');
+    const githubProviderFilter = core.getBooleanInput('github-provider-filter');
     const ignoreLabel = core.getInput('ignore-label');
     core.info('Getting open pull requests...');
     const pullRequests = await getPullRequests();
@@ -74,6 +74,7 @@ async function main() {
       }
       const github2provider = stringToObject(github2providerString);
       const pr2userFiltered = getPr2UserArrayFiltered(pr2user, github2provider, githubProviderFilter);
+      core.info(`The github provider map: ${github2provider} should filter: ${githubProviderFilter} result: ${pr2userFiltered}`);
       if (!pr2userFiltered.length) {
         core.info(`No notifications to send after filter.`);
         return;
