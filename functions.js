@@ -39,8 +39,7 @@ function getPr2UserArrayFiltered(pr2Users, githubProviderMap, githubProviderFilt
   if (!githubProviderFilter) {
     return pr2Users
   }
-  const users = githubProviderMap.keys()
-  return pr2Users.filter((pr) => pr['login'] in users)
+  return pr2Users.filter((pr) => pr.login in githubProviderMap)
 }
 
 /**
