@@ -19,10 +19,6 @@ inputs:
     description: 'Map GitHub username to Slack user IDs. Eg: "DavideViolante:UABCDEFGH,foobar123:UIHJKLMNO"'
     required: false
     default: ''
-  github-provider-filter:
-    description: 'Limit Pull Request notifications to only users in the github-provider-map. Eg: "true" or "false"'
-    required: false
-    default: 'false'
   ignore-label:
     description: 'Ignore Pull Requests with that label'
     required: false
