@@ -23,6 +23,10 @@ inputs:
     description: 'Ignore Pull Requests with that label'
     required: false
     default: ''
+  enable-user-filter:
+    description: 'Filters Pull Request notifications to only the users specified in github-provider-map.'
+    required: false
+    default: 'false'
 runs:
   using: 'node16'
   main: 'dist/index.js'
