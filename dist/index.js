@@ -36,13 +36,13 @@ function getPullRequestsReviewersCount(pullRequests) {
 
 /**
  * Filter the Pr2 User array
+ * @param {Boolean} userFilterEnabled flag to determine whether to filter pr2Users
  * @param {Array} pr2Users Array of Objects with { url, title, login } properties
  * @param {Object} githubProviderMap Object with usernames as properties and IDs as values
- * @param {Boolean} githubProviderFilter flag to determine whether to filter pr2Users
  * @return {Array} Filtered Array of Objects with { url, title, login } properties
  */
-function getPr2UserArrayFiltered(pr2Users, githubProviderMap, githubProviderFilter) {
-  if (!githubProviderFilter) {
+function getPr2UserArrayFiltered(userFilterEnabled, pr2Users, githubProviderMap) {
+  if (!userFilterEnabled) {
     return pr2Users
   }
   return pr2Users.filter((pr) => pr.login in githubProviderMap)
@@ -11026,8 +11026,7 @@ async function main() {
     const provider = core.getInput('provider');
     const channel = core.getInput('channel');
     const github2providerString = core.getInput('github-provider-map');
-    const githubProviderFilter = core.getBooleanInput('github-provider-filter');
-    core.info(`Should filter: ${githubProviderFilter}`);
+    const userFilterEnabled = core.getBooleanInput('enable-user-filter');
     const ignoreLabel = core.getInput('ignore-label');
     core.info('Getting open pull requests...');
     const pullRequests = await getPullRequests();
@@ -11042,12 +11041,12 @@ async function main() {
         return core.setFailed(`The github-provider-map string is not in correct format: "name1:id1,name2:id2,..."`);
       }
       const github2provider = stringToObject(github2providerString);
-      const pr2userFiltered = getPr2UserArrayFiltered(pr2user, github2provider, githubProviderFilter);
-      core.info(`Filtered: ${JSON.stringify(pr2userFiltered)}`);
+      const pr2userFiltered = getPr2UserArrayFiltered(userFilterEnabled, pr2user, github2provider);
       if (!pr2userFiltered.length) {
         core.info(`No notifications to send after filter.`);
         return;
       }
+      core.info(`Filtered (${userFilterEnabled ? 'on' : 'off'}) notifications: ${JSON.stringify(pr2userFiltered)}`);
       const messageText = prettyMessage(pr2userFiltered, github2provider, provider);
       let messageObject;
       switch (provider) {

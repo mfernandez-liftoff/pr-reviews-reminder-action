@@ -32,6 +32,10 @@ Another hacky way (no code) to find the MS Teams UPN is the following: open MS T
 
 Ignore Pull Requests with that label(s), eg: `no-reminder` or `no-reminder,ignore me` (optional).
 
+### enable-user-filter
+
+Filter Pull Request notifications to include only the users listed in the `github-provider-map` (optional).
+
 ## Example usage
 
 ```yaml
@@ -55,6 +59,7 @@ jobs:
         channel: '' # Optional, eg: #general
         github-provider-map: '' # Optional, eg: DavideViolante:UEABCDEFG,foobar:UAABCDEFG
         ignore-label: '' # Optional, eg: no-reminder,ignore me
+        enable-user-filter: 'true' # Optional. Defaults to 'false'.
 ```
 
 ## Bug or feedback?
